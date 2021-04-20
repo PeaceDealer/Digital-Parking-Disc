@@ -44,12 +44,14 @@ draw.line(clockhand(90, baseLength + 0), fill='red', width=3) # Minute hand.
 
 for x in range(360):
     if( (x % 30) == 0):
-        print("drawing tick at " + str(x))
         draw.line(tick(x, 7), fill='black', width=3) # Hour Ticks
 
     if((x % 10) == 0 and (x % 30) != 0):
-        print("drawing tick at " + str(x))
+        
         draw.line(tick(x, 2), fill='black', width=1) # Hour Ticks
- 
+
+font = ImageFont.truetype(r'RobotoMono-VariableFont_wght.ttf', 40)
+# draw.text((x, y),"Sample Text",(r,g,b))
+draw.text((20, 200),"<P> 6:00", 'black', font=font)
 
 img.save("image.png", "PNG")
