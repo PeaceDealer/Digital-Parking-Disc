@@ -1,6 +1,8 @@
 from PIL import Image, ImageFont, ImageDraw, ImageOps
 from inky import InkyWHAT
+from datetime import datetime, timedelta
 import math
+
 
 def clockhand(angle, length):
    """
@@ -10,7 +12,7 @@ def clockhand(angle, length):
    """
    offset = 150
 
-   radian_angle = math.pi * angle / 180.0
+   radian_angle = math.pi * (angle-90) / 180.0
    x = offset + length * math.cos(radian_angle)
    y = offset + length * math.sin(radian_angle)
    return [(offset,offset),(x,y)]
@@ -33,6 +35,8 @@ def tick(angle, length):
 
    return [(sX,sY),(x,y)]
 
+def ceil_dt(dt, delta):
+    return dt + (datetime.min - dt) % delta
 
 inky_display = InkyWHAT('red')
 
@@ -47,7 +51,14 @@ img = Image.new("P", (300, 400), colourBackground)
 draw = ImageDraw.Draw(img)
 draw.ellipse((20, 20, 280, 280), fill = None, outline = colourForeground, width=5)
 
-draw.line(clockhand(90, 130), fill=colourSpecial, width=3) # Hand.
+now = ceil_dt(datetime.now(), timedelta(minutes=15))
+
+angles_h = now.hour * 30 + now.minute / 2
+
+print(now)
+print(angles_h)
+
+draw.line(clockhand(angles_h, 130), fill=colourSpecial, width=10) # Hand.
 
 for x in range(360):
     if( (x % 30) == 0):
@@ -60,11 +71,11 @@ for x in range(360):
 font = ImageFont.truetype(r'RobotoMono-VariableFont_wght.ttf', 40)
 
 draw = ImageDraw.Draw(img)
-draw.text((41, 300),"P 06:00", colourForeground, font=font)
+draw.text((41, 300),"P "+ str(now.hour) +":" + str(now.minute).zfill(2), colourForeground, font=font)
 
-#img = img.transpose(Image.ROTATE_270)
-#inky_display.set_image(img)
-#inky_display.show()
+img = img.transpose(Image.ROTATE_270)
+inky_display.set_image(img)
+inky_display.show()
 
 img.putpalette([255, 255, 255, 0, 0, 0, 255, 0, 0])
 img.save("image.png")
