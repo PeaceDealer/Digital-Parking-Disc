@@ -1,15 +1,8 @@
-from PIL import Image, ImageDraw, __version__
+from datetime import datetime, timedelta
 
-print(__version__)
+def ceil_dt(dt, delta):
+    return dt + (datetime.min - dt) % delta
 
-image = Image.new("P", (300, 300), 0)
-
-draw = ImageDraw.Draw(image)
-
-draw.ellipse((20, 20, 280, 280), fill=None, outline=1, width=5)
-
-#image.putpalette([255, 255, 255, 0, 0, 0])
-
-image = image.resize((600, 600), Image.NEAREST)
-
-image.save("test.png")
+now = datetime.now()
+print(now)    
+print(ceil_dt(now, timedelta(minutes=30)))
