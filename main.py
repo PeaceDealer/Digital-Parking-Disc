@@ -62,7 +62,9 @@ font = ImageFont.truetype(r'RobotoMono-VariableFont_wght.ttf', 40)
 draw = ImageDraw.Draw(img)
 draw.text((41, 300),"P 06:00", colourForeground, font=font)
 
-img = img.transpose(Image.ROTATE_270)
+#img = img.transpose(Image.ROTATE_270)
+#inky_display.set_image(img)
+#inky_display.show()
 
-inky_display.set_image(img)
-inky_display.show()
+img.putpalette([255, 255, 255, 0, 0, 0, 255, 0, 0])
+img.save("image.png")
