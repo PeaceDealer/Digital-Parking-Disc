@@ -43,7 +43,7 @@ colourSpecial = inky_display.RED
 
 inky_display.set_border(colourBackground)
 
-img = Image.new("P", (inky_display.WIDTH, inky_display.HEIGHT), colourBackground)
+img = Image.new("P", (300, 400), colourBackground)
 
 draw = ImageDraw.Draw(img)
 draw.ellipse((20, 20, 280, 280), fill = None, outline = colourForeground, width=5)
@@ -61,9 +61,9 @@ for x in range(360):
 font = ImageFont.truetype(r'RobotoMono-VariableFont_wght.ttf', 40)
 
 draw = ImageDraw.Draw(img)
-draw.text((220, 20),"P 6:00", colourForeground, font=font)
+draw.text((41, 300),"P 06:00", colourForeground, font=font)
+
+img = img.transpose(Image.ROTATE_270)
 
 inky_display.set_image(img)
 inky_display.show()
-
-img.save("image.png")
