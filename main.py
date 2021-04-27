@@ -61,7 +61,12 @@ def getserial():
   return cpuserial
 
 def setDisplayTimer(settings):
-
+    deviceRef.update(
+        { 
+            "last-update-start": datetime.now().isoformat()
+        }
+    )
+   
     colourBackground = inky_display.WHITE
     colourForeground = inky_display.BLACK
 
@@ -108,7 +113,7 @@ def setDisplayTimer(settings):
 
     deviceRef.update(
         { 
-            "last-update": datetime.now().isoformat(),
+            "last-update-done": datetime.now().isoformat(),
             "last-set-time": now.isoformat()
         }
     )
@@ -144,7 +149,7 @@ deviceRef = db.reference("devices").child(serial)
 
 deviceRef.update(
         { 
-            "last-seen": datetime.now().isoformat(),
+            "last-boot": datetime.now().isoformat(),
             "network-adapters": ips,
             "public-ip": wanip
         }
