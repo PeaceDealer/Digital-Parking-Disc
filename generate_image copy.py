@@ -11,7 +11,7 @@ def clockhand(angle, length):
    Angle 0 is 12 o'clock, 90 is 3 o'clock.
    Based around (32,32) as origin, (0,0) in top left.
    """
-   offset = 224
+   offset = 150
 
    radian_angle = math.pi * angle / 180.0
    x = offset + length * math.cos(radian_angle)
@@ -43,8 +43,8 @@ def tick(angle, length):
    Angle 0 is 12 o'clock, 90 is 3 o'clock.
    Based around (32,32) as origin, (0,0) in top left.
    """
-   offset = 224
-   offset2 = 220
+   offset = 150
+   offset2 = 149
 
    radian_angle = math.pi * angle / 180.0
    x = int(offset + offset2 * math.cos(radian_angle))
@@ -62,25 +62,23 @@ def number(angle):
    Angle 0 is 12 o'clock, 90 is 3 o'clock.
    Based around (32,32) as origin, (0,0) in top left.
    """
-   offset = 204
-   offset2 = 170
-   offset3 = 0
+   offset = 140
+   offset2 = 15
 
    radian_angle = math.pi * angle / 180.0
-   x = int(offset + offset2 * math.cos(radian_angle))
-   y = int(offset + offset2 * math.sin(radian_angle))
+   x = int(offset + 120 * math.cos(radian_angle))
+   y = int(offset + 120 * math.sin(radian_angle))
 
-   sX = int(x-offset3 * math.cos(radian_angle))
-   sY = int(y-offset3 * math.sin(radian_angle))
+   sX = int(x-offset2 * math.cos(radian_angle))
+   sY = int(y-offset2 * math.sin(radian_angle))
 
 
    return (sX,sY)
 
 def hourFromAngle(angle):
-    print(angle)
     angle *= -1
     result = 3 - (1/30) * (angle % 360)
-    
+
     if(result < 0):
         result += 12
 
@@ -90,7 +88,6 @@ def hourFromAngle(angle):
     if(result < 10):
         return " " + str(int(result))
 
-
     return str(int(result))
 
 
@@ -99,26 +96,28 @@ colourForeground = 'black'
 colourSpecial = 'red'
 
 font = ImageFont.truetype(r'RobotoMono-VariableFont_wght.ttf', 40)
-numberFont = ImageFont.truetype(r'RobotoMono-Bold.ttf', 30)
+numberFont = ImageFont.truetype(r'RobotoMono-Bold.ttf', 17)
 
-img = Image.new("RGB", (448, 600), colourBackground)
+img = Image.new("RGB", (300, 400), colourBackground)
 
 draw = ImageDraw.Draw(img)
-draw.ellipse((2, 2, 446, 446), fill = None, outline = colourForeground, width=2)
-draw.ellipse((30, 30, 418, 418), fill = None, outline = colourForeground, width=2)
+draw.ellipse((1, 1, 298, 298), fill = None, outline = colourForeground, width=2)
+draw.ellipse((30, 30, 270, 270), fill = None, outline = colourForeground, width=2)
 
-triangle = [(224, 184), (284, 204),(284, 264), (224, 284), (10,224)]
+triangle = [(120, 150), (140, 120), (160, 120), (180, 150), (150, 285)]
 
-draw.polygon(rotate_point(triangle, 90, (224,224)), fill = colourSpecial)
+draw.polygon(rotate_point(triangle, 90, (150,150)), fill = colourSpecial)
 
 for x in np.arange(1, 361, 0.5):
     if( (x % 30) == 0):
-        draw.line(tick(x, 26), fill=colourForeground, width=5) # Hour Ticks
+        draw.line(tick(x, 30), fill=colourForeground, width=5) # Hour Ticks
         draw.text(number(x), hourFromAngle(x), colourForeground, font=numberFont)
 
     if((x % 7.5) == 0 and (x % 30) != 0):        
-        draw.line(tick(x, 26), fill=colourForeground, width=2) # Ticks
+        draw.line(tick(x, 30), fill=colourForeground, width=2) # Ticks
 
 draw = ImageDraw.Draw(img)
+
+img = img.transpose(Image.ROTATE_90)
 
 img.save("image.png")
