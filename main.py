@@ -75,7 +75,7 @@ def stream(message):
     setDisplayTimer(settings)
 
 # Use the application default credentials
-cred = credentials.Certificate("digital-parking-disc-firebase-adminsdk-z50m3-168434f695.json")
+cred = credentials.Certificate("digital-parking-disc-firebase-adminsdk-qwlqt-37a85cd112.json")
 firebase_admin.initialize_app(cred, {
     'databaseURL': 'https://digital-parking-disc-default-rtdb.europe-west1.firebasedatabase.app/'
 })
