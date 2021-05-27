@@ -12,22 +12,6 @@ from firebase_admin import db
 
 import RPi.GPIO as GPIO
 
-BUTTONS = [5, 6, 16, 24]
-LABELS = ['A', 'B', 'C', 'D']
-GPIO.setmode(GPIO.BCM)
-GPIO.setup(BUTTONS, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-
-def process_button(label):
-    print(label)
-
-def handle_button(pin):
-    label = LABELS[BUTTONS.index(pin)]
-    process_button(label)
-
-for pin in BUTTONS:
-    GPIO.add_event_detect(pin, GPIO.FALLING, handle_button, bouncetime=250)
-
-
 def ceil_dt(dt, delta):
     return dt + (datetime.min - dt) % delta
 
@@ -131,8 +115,58 @@ if("wanted-time" not in settings):
     nowTmp = datetime.now().__add__(timedelta(hours=1))
     now = ceil_dt(nowTmp, timedelta(minutes=15))
     settings["wanted-time"] = now.isoformat()
+    settingsRef.update(settings)
 
 #setDisplayTimer(settings)
+
+BUTTONS = [5, 6, 16, 24]
+LABELS = ['A', 'B', 'C', 'D']
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(BUTTONS, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+
+def process_button(label):
+    if(label == 'A'):
+        print("setting time to now")
+        print(settings)
+        nowTmp = datetime.now().__add__(timedelta(hours=1))
+        now = ceil_dt(nowTmp, timedelta(minutes=15))
+        settings["wanted-time"] = now.isoformat()
+        print(settings)
+
+    if(label == 'B'):
+        print("adding 15 minutes to timer")
+        print(settings)
+        now = datetime.fromisoformat(settings["wanted-time"])
+        now = now + timedelta(minutes=15)
+        settings["wanted-time"] = now.isoformat()
+        print(settings)
+
+    if(label == 'C'):
+        print("adding 1 hour to timer")
+        print(settings)
+        now = datetime.fromisoformat(settings["wanted-time"])
+        print(now)
+        now = now + timedelta(hours=1)
+        print(now)
+        settings["wanted-time"] = now.isoformat()
+        print(settings)
+
+    if(label == 'D'):
+        print("Push Time Update")
+        print(inky_display.busy_pin)
+        print(settings)
+        #if not connected
+        setDisplayTimer(settings)
+        #else
+        #settingsRef.update(settings)
+
+def handle_button(pin):
+    label = LABELS[BUTTONS.index(pin)]
+    process_button(label)
+
+for pin in BUTTONS:
+    GPIO.add_event_detect(pin, GPIO.FALLING, handle_button, bouncetime=250)
+
 
 print("Handing over to settings Stream")
 settingsRef.listen(stream)
