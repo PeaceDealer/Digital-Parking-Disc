@@ -2,8 +2,6 @@ from PIL import Image, ImageFont, ImageDraw, ImageOps
 import math 
 from math import sin, cos, radians
 import numpy as np
-import scipy
-
 
 def clockhand(angle, length):
    """
@@ -17,7 +15,6 @@ def clockhand(angle, length):
    x = offset + length * math.cos(radian_angle)
    y = offset + length * math.sin(radian_angle)
 
-   print([(offset+30,offset),(offset-30,offset),(x,y)])
    return [(offset+30,offset),(offset-30,offset),(x,y)]
 
 def rotate_point(points, angle, center_point=(0, 0)):
@@ -77,7 +74,6 @@ def number(angle):
    return (sX,sY)
 
 def hourFromAngle(angle):
-    print(angle)
     angle *= -1
     result = 3 - (1/30) * (angle % 360)
     
@@ -94,31 +90,33 @@ def hourFromAngle(angle):
     return str(int(result))
 
 
-colourBackground = 'white'
-colourForeground = 'black'
-colourSpecial = 'red'
+def generateImage(angle, colors, type="P"):
+    colourForeground = colors[0]
+    colourBackground = colors[1]
+    colourSpecial = colors[2]
 
-font = ImageFont.truetype(r'RobotoMono-VariableFont_wght.ttf', 40)
-numberFont = ImageFont.truetype(r'RobotoMono-Bold.ttf', 30)
+    numberFont = ImageFont.truetype(r'RobotoMono-Bold.ttf', 30)
 
-img = Image.new("RGB", (448, 600), colourBackground)
+    img = Image.new(type, (600, 448), colourBackground)
 
-draw = ImageDraw.Draw(img)
-draw.ellipse((2, 2, 446, 446), fill = None, outline = colourForeground, width=2)
-draw.ellipse((30, 30, 418, 418), fill = None, outline = colourForeground, width=2)
+    draw = ImageDraw.Draw(img)
+    draw.ellipse((2, 2, 446, 446), fill = None, outline = colourForeground, width=2)
+    draw.ellipse((30, 30, 418, 418), fill = None, outline = colourForeground, width=2)
 
-triangle = [(224, 184), (284, 204),(284, 264), (224, 284), (10,224)]
+    triangle = [(224, 184), (284, 204),(284, 264), (224, 284), (10,224)]
 
-draw.polygon(rotate_point(triangle, 90, (224,224)), fill = colourSpecial)
+    draw.polygon(rotate_point(triangle, angle+90, (224,224)), fill = colourSpecial)
 
-for x in np.arange(1, 361, 0.5):
-    if( (x % 30) == 0):
-        draw.line(tick(x, 26), fill=colourForeground, width=5) # Hour Ticks
-        draw.text(number(x), hourFromAngle(x), colourForeground, font=numberFont)
+    for x in np.arange(1, 361, 0.5):
+        if( (x % 30) == 0):
+            draw.line(tick(x, 26), fill=colourForeground, width=5) # Hour Ticks
+            draw.text(number(x), hourFromAngle(x), colourForeground, font=numberFont)
 
-    if((x % 7.5) == 0 and (x % 30) != 0):        
-        draw.line(tick(x, 26), fill=colourForeground, width=2) # Ticks
+        if((x % 7.5) == 0 and (x % 30) != 0):        
+            draw.line(tick(x, 26), fill=colourForeground, width=2) # Ticks
 
-draw = ImageDraw.Draw(img)
+    return img
 
-img.save("image.png")
+if __name__ == "__main__":
+    image = generateImage(0, ["WHITE","BLACK","RED"], "RGB")
+    image.save("image.png")
