@@ -38,12 +38,12 @@ def setDisplayTimer(settings):
 
     colourBackground = inky_display.WHITE
     colourForeground = inky_display.BLACK
+    colourSpecial = inky_display.ORANGE
 
     if(settings["dark-mode"]):
         colourBackground = inky_display.BLACK
         colourForeground = inky_display.WHITE
-
-    colourSpecial = inky_display.ORANGE
+	colourSpecial = ink_display.RED
 
     now = datetime.fromisoformat(settings["wanted-time"])
     angles_h = now.hour * 30 + now.minute / 2
