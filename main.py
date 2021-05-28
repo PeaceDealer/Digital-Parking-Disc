@@ -26,16 +26,16 @@ def getserial():
     f.close()
   except:
     cpuserial = "ERROR000000000"
- 
+
   return cpuserial
 
 def setDisplayTimer(settings):
     deviceRef.update(
-        { 
+        {
             "last-update-start": datetime.now().isoformat()
         }
     )
-   
+
     colourBackground = inky_display.WHITE
     colourForeground = inky_display.BLACK
 
@@ -43,7 +43,7 @@ def setDisplayTimer(settings):
         colourBackground = inky_display.BLACK
         colourForeground = inky_display.WHITE
 
-    colourSpecial = inky_display.RED
+    colourSpecial = inky_display.ORANGE
 
     now = datetime.fromisoformat(settings["wanted-time"])
     angles_h = now.hour * 30 + now.minute / 2
