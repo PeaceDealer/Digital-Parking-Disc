@@ -1,5 +1,5 @@
 from PIL import Image, ImageFont, ImageDraw, ImageOps
-import math 
+import math
 from math import sin, cos, radians
 import numpy as np
 
@@ -76,7 +76,7 @@ def number(angle):
 def hourFromAngle(angle):
     angle *= -1
     result = 3 - (1/30) * (angle % 360)
-    
+
     if(result < 0):
         result += 12
 
@@ -100,8 +100,8 @@ def generateImage(angle, colors, type="P"):
     img = Image.new(type, (600, 448), colourBackground)
 
     draw = ImageDraw.Draw(img)
-    draw.ellipse((2, 2, 446, 446), fill = None, outline = colourForeground, width=2)
-    draw.ellipse((30, 30, 418, 418), fill = None, outline = colourForeground, width=2)
+    draw.ellipse((2, 2, 446, 446), fill = None, outline = colourForeground, width=3)
+    draw.ellipse((30, 30, 418, 418), fill = None, outline = colourForeground, width=3)
 
     triangle = [(224, 184), (284, 204),(284, 264), (224, 284), (10,224)]
 
@@ -109,11 +109,11 @@ def generateImage(angle, colors, type="P"):
 
     for x in np.arange(1, 361, 0.5):
         if( (x % 30) == 0):
-            draw.line(tick(x, 26), fill=colourForeground, width=5) # Hour Ticks
+            draw.line(tick(x, 26), fill=colourForeground, width=6) # Hour Ticks
             draw.text(number(x), hourFromAngle(x), colourForeground, font=numberFont)
 
         if((x % 7.5) == 0 and (x % 30) != 0):        
-            draw.line(tick(x, 26), fill=colourForeground, width=2) # Ticks
+            draw.line(tick(x, 26), fill=colourForeground, width=3) # Ticks
 
     return img
 
